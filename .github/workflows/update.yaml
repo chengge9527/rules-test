@@ -25,12 +25,7 @@ jobs:
         python-version: '3.10'
 
     - name: Run rules processing script
-      run: |
-        cat > process_rules.py << 'EOF'
-        # 你的Python脚本内容粘贴在这里
-        # (从 import urllib.request 到最后一行)
-        EOF
-        python process_rules.py
+      run: update.py
 
     - name: Commit and push changes
       run: |
