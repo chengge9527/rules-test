@@ -1,9 +1,9 @@
 name: Merge AdGuard Rules
 
 on:
-  push:
-    branches:
-      - main  # 你可以根据需要修改为其他分支
+  schedule:
+    - cron: '0 */8 * * *'  # 每8小时执行一次
+  workflow_dispatch:     # 允许手动触发
 
 jobs:
   merge-rules:
