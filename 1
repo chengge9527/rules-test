@@ -1,11 +1,3 @@
-add action=accept chain=input comment="defconf: accept ICMPv6 after RAW" protocol=icmpv6
-add action=accept chain=input comment="defconf: accept established,related,untracked" connection-state=established,related,untracked
-add action=accept chain=input comment="defconf: accept UDP traceroute" disabled=yes dst-port=33434-33534 protocol=udp
-add action=accept chain=input comment="defconf: accept DHCPv6-Client prefix delegation." dst-port=546 protocol=udp src-address=fe80::/10
-add action=accept chain=input comment="defconf: accept IKE" disabled=yes dst-port=500,4500 protocol=udp
-add action=accept chain=input comment="defconf: accept IPSec AH" disabled=yes protocol=ipsec-ah
-add action=accept chain=input comment="defconf: accept IPSec ESP" disabled=yes protocol=ipsec-esp
-add action=drop chain=input comment="defconf: drop all not coming from LAN" in-interface-list=!LAN
 add action=accept chain=forward comment="defconf: accept established,related,untracked" connection-state=established,related,untracked
 add action=drop chain=forward comment="defconf: drop invalid" connection-state=invalid
 add action=drop chain=forward comment="defconf: drop bad forward IPs" src-address-list=no_forward_ipv6
