@@ -1,12 +1,12 @@
 add action=accept chain=forward comment="defconf: accept established,related,untracked" connection-state=established,related,untracked
 add action=drop chain=forward comment="defconf: drop invalid" connection-state=invalid
-add action=drop chain=forward comment="defconf: drop bad forward IPs" src-address-list=no_forward_ipv6
-add action=drop chain=forward comment="defconf: drop bad forward IPs" dst-address-list=no_forward_ipv6
+add action=drop chain=forward src-address-list=no_forward_ipv6 comment="defconf: drop bad forward IPs"
+add action=drop chain=forward dst-address-list=no_forward_ipv6 comment="defconf: drop bad forward IPs"
 add action=drop chain=forward comment="defconf: rfc4890 drop hop-limit=1" hop-limit=equal:1 protocol=icmpv6
 add action=accept chain=forward comment="defconf: accept ICMPv6 after RAW" protocol=icmpv6
-add action=accept chain=forward comment="defconf: accept HIP" disabled=yes protocol=139
-add action=accept chain=forward comment="defconf: accept IKE" disabled=yes dst-port=500,4500 protocol=udp
-add action=accept chain=forward comment="defconf: accept AH" disabled=yes protocol=ipsec-ah
-add action=accept chain=forward comment="defconf: accept ESP" disabled=yes protocol=ipsec-esp
-add action=accept chain=forward comment="defconf: accept all that matches IPSec policy" disabled=yes ipsec-policy=in,ipsec
+add action=accept chain=forward comment="defconf: accept HIP" protocol=139
+add action=accept chain=forward comment="defconf: accept IKE" protocol=udp dst-port=500,4500
+add action=accept chain=forward comment="defconf: accept AH" protocol=ipsec-ah
+add action=accept chain=forward comment="defconf: accept ESP" protocol=ipsec-esp
+add action=accept chain=forward comment="defconf: accept all that matches IPSec policy" ipsec-policy=in,ipsec
 add action=drop chain=forward comment="defconf: drop everything else not coming from LAN" in-interface-list=!LAN
