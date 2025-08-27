@@ -1,12 +1,13 @@
-add action=accept chain=forward comment="defconf: accept established,related,untracked" connection-state=established,related,untracked
+/ip firewall filter
+add action=accept chain=input comment="accept ICMP" protocol=icmp
+add action=accept chain=input comment="defconf: accept established,related,untracked" connection-state=established,related,untracked
+add action=add-src-to-address-list address-list=PSD address-list-timeout=1d chain=input comment="Add Scanner IP" disabled=yes in-interface-list=WAN log=yes log-prefix="[-----Add Scanner IP-----]" protocol=tcp psd=21,3s,3,1
+add action=drop chain=input comment="defconf: drop all not coming from LAN" in-interface-list=!LAN
+add action=accept chain=forward comment="defconf: accept all that matches IPSec policy" disabled=yes ipsec-policy=in,ipsec
+add action=fasttrack-connection chain=forward comment="defconf: fasttrack" connection-state=established,related disabled=yes hw-offload=yes
+add action=accept chain=forward comment="defconf: accept established,related, untracked" connection-state=established,related,untracked
+add action=accept chain=forward comment="Pass Routing Mark (to_openwrt)" in-interface-list=LAN routing-mark=to_openwrt
 add action=drop chain=forward comment="defconf: drop invalid" connection-state=invalid
-add action=drop chain=forward src-address-list=no_forward_ipv6 comment="defconf: drop bad forward IPs"
-add action=drop chain=forward dst-address-list=no_forward_ipv6 comment="defconf: drop bad forward IPs"
-add action=drop chain=forward comment="defconf: rfc4890 drop hop-limit=1" hop-limit=equal:1 protocol=icmpv6
-add action=accept chain=forward comment="defconf: accept ICMPv6 after RAW" protocol=icmpv6
-add action=accept chain=forward comment="defconf: accept HIP" protocol=139
-add action=accept chain=forward comment="defconf: accept IKE" protocol=udp dst-port=500,4500
-add action=accept chain=forward comment="defconf: accept AH" protocol=ipsec-ah
-add action=accept chain=forward comment="defconf: accept ESP" protocol=ipsec-esp
-add action=accept chain=forward comment="defconf: accept all that matches IPSec policy" ipsec-policy=in,ipsec
-add action=drop chain=forward comment="defconf: drop everything else not coming from LAN" in-interface-list=!LAN
+add action=drop chain=forward comment="defconf:  drop all from WAN not DSTNATed" connection-nat-state=!dstnat connection-state=new in-interface-list=WAN
+add action=drop chain=forward comment="defconf: drop bad forward IPs" src-address-list=no_forward_ipv4
+add action=drop chain=forward comment="defconf: drop bad forward IPs" dst-address-list=no_forward_ipv4
