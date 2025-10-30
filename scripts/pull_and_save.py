@@ -1,7 +1,7 @@
 import docker
 
 client = docker.from_env()
-image_name = "metacubex/mihomo:latest"
+image_name = "mihomo:latest"
 output_path = "/tmp/mihomo_image.tar"
 
 # 拉取镜像
