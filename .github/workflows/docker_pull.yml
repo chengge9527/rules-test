@@ -23,7 +23,7 @@ jobs:
       run: python scripts/pull_and_save.py
 
     - name: Upload Docker image as artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: alpine-image
         path: /tmp/alpine_image.tar
