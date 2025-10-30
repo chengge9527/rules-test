@@ -20,7 +20,7 @@ jobs:
       run: pip install docker
 
     - name: Pull Docker image using Python
-      run: python pull_image.py
+      run: python pull_image_adguardhome.py
 
     - name: Upload image as artifact
       uses: actions/upload-artifact@v4
