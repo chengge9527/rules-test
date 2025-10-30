@@ -1,0 +1,29 @@
+name: Pull Docker Image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  pull_and_save:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Docker SDK
+      run: pip install docker
+
+    - name: Run Python script to pull and save image
+      run: python scripts/pull_and_save.py
+
+    - name: Upload Docker image as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: alpine-image
+        path: /tmp/alpine_image.tar
