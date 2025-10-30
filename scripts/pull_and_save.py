@@ -1,17 +1,15 @@
 import docker
 
 client = docker.from_env()
-image_name = "mihomo:latest"
-output_path = "/tmp/mihomo_image.tar"
 
-# 拉取镜像
-print(f"Pulling image {image_name}...")
-client.images.pull(image_name)
+image_name = "metacubex/mihomo:latest"  # 替换为你需要的镜像名
+output_file = "mihomo.tar"
 
-# 保存为 tar 文件
-print(f"Saving image to {output_path}...")
-image = client.images.get(image_name)
-with open(output_path, "wb") as f:
+print(f"Pulling image: {image_name}")
+image = client.images.pull(image_name)
+
+print(f"Saving image to {output_file}")
+with open(output_file, "wb") as f:
     for chunk in image.save(named=True):
         f.write(chunk)
 
