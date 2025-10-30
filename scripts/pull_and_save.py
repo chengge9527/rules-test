@@ -1,8 +1,8 @@
 import docker
 
 client = docker.from_env()
-image_name = "alpine:latest"
-output_path = "/tmp/alpine_image.tar"
+image_name = "metacubex/mihomo:latest"
+output_path = "/tmp/mihomo_image.tar"
 
 # 拉取镜像
 print(f"Pulling image {image_name}...")
