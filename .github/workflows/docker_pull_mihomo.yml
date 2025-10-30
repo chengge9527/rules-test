@@ -16,8 +16,8 @@ jobs:
       with:
         python-version: '3.x'
 
-    - name: Install Docker
-      uses: docker/setup-buildx-action@v2
+    - name: Install Python Docker SDK
+      run: pip install docker
 
     - name: Pull Docker image using Python
       run: python pull_image.py
