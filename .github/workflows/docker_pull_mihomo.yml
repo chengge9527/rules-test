@@ -20,7 +20,7 @@ jobs:
       uses: docker/setup-buildx-action@v2
 
     - name: Pull Docker image using Python
-      run: python scripts/pull_and_save.py
+      run: python pull_image.py
 
     - name: Upload image as artifact
       uses: actions/upload-artifact@v4
