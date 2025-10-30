@@ -1,4 +1,4 @@
-name: Pull Docker Image and Upload
+name: Pull Docker Image and Upload（mihomo）
 
 on:
   workflow_dispatch:
