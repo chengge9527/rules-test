@@ -1,0 +1,29 @@
+name: Pull Docker Image and Upload（peerbanhelper）
+
+on:
+  workflow_dispatch:
+
+jobs:
+  pull-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install Python Docker SDK
+      run: pip install docker
+
+    - name: Pull Docker image using Python
+      run: python pull_image_peerbanhelper.py
+
+    - name: Upload image as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: peerbanhelper-image
+        path: peerbanhelper.tar
