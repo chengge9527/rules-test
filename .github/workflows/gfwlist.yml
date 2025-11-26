@@ -1,0 +1,50 @@
+name: Generate RouterOS GFW Forward Rules
+
+on:
+  schedule:
+    - cron: "0 2 * * *"   # 每天凌晨 2 点自动运行
+  workflow_dispatch:       # 手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Generate gfw_forward.rsc
+        run: |
+          python << 'EOF'
+          import requests
+
+          url = "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt"
+          resp = requests.get(url)
+          resp.raise_for_status()
+          domains = resp.text.splitlines()
+
+          forward_ip = "192.168.1.12"  # 修改为你的转发目标 IP
+          with open("gfw_forward.rsc", "w", encoding="utf-8") as f:
+              f.write("/ip dns static\n")
+              for d in domains:
+                  d = d.strip()
+                  if not d or d.startswith("#"):
+                      continue
+                  f.write(f"add forward-to={forward_ip} match-subdomain=yes name={d} type=FWD\n")
+          EOF
+
+      - name: Commit and push generated file
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add gfw_forward.rsc
+          git commit -m "Update gfw_forward.rsc"
+          git push
