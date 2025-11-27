@@ -2,7 +2,7 @@ name: Generate RouterOS GFW Forward Rules
 
 on:
   schedule:
-    - cron: "0 2 * * *"   # 每天凌晨 2 点自动运行
+#    - cron: "0 2 * * *"   # 每天凌晨 2 点自动运行
   workflow_dispatch:       # 手动触发
 
 jobs:
