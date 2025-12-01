@@ -18,7 +18,7 @@ mkdir -p /mnt/boot/efi
 mount ${DISK}1 /mnt/boot/efi
 
 echo ">>> 安装基础系统"
-pacstrap /mnt base linux-zen linux-zen-headers linux-firmware vim nano networkmanager grub efibootmgr
+pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware vim nano networkmanager grub efibootmgr
 
 echo ">>> 生成 fstab"
 genfstab -U /mnt >> /mnt/etc/fstab
