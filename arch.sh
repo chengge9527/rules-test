@@ -35,12 +35,12 @@ locale-gen
 
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
-echo "archusb" > /etc/hostname
+echo "arclinux" > /etc/hostname
 passwd root
 
 systemctl enable NetworkManager
 
-echo ">>> 安装 GRUB 到 U盘"
+echo ">>> 安装 GRUB"
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable
 grub-mkconfig -o /boot/grub/grub.cfg
 
@@ -48,8 +48,6 @@ echo ">>> 新建用户 monkey"
 useradd -m -G wheel -s /bin/bash monkey
 passwd monkey
 
-# 允许 wheel 组使用 sudo
-sed -i '/%wheel ALL=(ALL:ALL) ALL/s/^#//' /etc/sudoers
 EOF
 
 echo ">>> 安装完成！请 umount 并重启"
