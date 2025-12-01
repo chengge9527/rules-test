@@ -26,7 +26,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 echo ">>> 进入 chroot 环境并配置系统"
 arch-chroot /mnt /bin/bash <<EOF
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-hwclock --systohc
+hwclock --systohc --localtime
 
 # 设置 locale
 sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
