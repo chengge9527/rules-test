@@ -36,7 +36,6 @@ locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
 echo "arclinux" > /etc/hostname
- # passwd root
 
 systemctl enable NetworkManager
 
@@ -46,7 +45,6 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 echo ">>> 新建用户 monkey"
 useradd -m -G wheel -s /bin/bash monkey
- # passwd monkey
 
 EOF
 
