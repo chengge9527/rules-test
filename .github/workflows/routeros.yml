@@ -1,0 +1,62 @@
+name: Generate RouterOS Routes
+
+on:
+  workflow_dispatch:   # 手动触发
+  schedule:
+    - cron: "0 2 * * *"   # 每天凌晨 2 点自动运行
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Generate RouterOS routes
+        run: |
+          python <<'EOF'
+          import requests
+
+          url = "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/telegram.list"
+          resp = requests.get(url)
+          resp.raise_for_status()
+
+          gateway = "192.168.1.12"
+          routing_table = "main"
+
+          template = (
+              "add comment=tg disabled=no distance=1 dst-address={dst} "
+              f"gateway={gateway} routing-table={routing_table} "
+              "scope=30 suppress-hw-offload=no target-scope=10"
+          )
+
+          routes = []
+          for line in resp.text.splitlines():
+              line = line.strip()
+              if not line or line.startswith("#"):
+                  continue
+              if ":" not in line:  # 只处理 IPv4
+                  routes.append(template.format(dst=line))
+
+          with open("routes.rsc", "w") as f:
+              f.write("/ip route\n")
+              for r in routes:
+                  f.write(r + "\n")
+          EOF
+
+      - name: Commit and push generated file
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add routes.rsc
+          git commit -m "Update routes.rsc from telegram.list"
+          git push
