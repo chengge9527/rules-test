@@ -2,7 +2,7 @@ import docker
 
 client = docker.from_env()
 
-image_name = "ghostchu/peerbanhelper:latest"  # 替换为你需要的镜像名
+image_name = "php:8.2-cli-alpine3.22"  # 替换为你需要的镜像名
 output_file = "peerbanhelper.tar"
 
 print(f"Pulling image: {image_name}")
