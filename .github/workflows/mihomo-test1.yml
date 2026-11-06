@@ -24,8 +24,8 @@ jobs:
         skopeo copy \
           --override-os linux \
           --override-arch amd64 \
-          docker://docker.io/metacubex/mihomo:1.19.25 \
-          docker-archive:${{ github.workspace }}/mihomo.tar:docker.io/metacubex/mihomo:1.19.25
+          docker://docker.io/metacubex/mihomo:v1.19.25 \
+          docker-archive:${{ github.workspace }}/mihomo.tar:docker.io/metacubex/mihomo:v1.19.25
           
         # 3. 确认生成的文件和大小
         ls -lh ${{ github.workspace }}
