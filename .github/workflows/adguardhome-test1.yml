@@ -15,7 +15,7 @@ jobs:
       run: |
         # 1. 显式拉取指定架构的镜像（RouterOS 容器设备通常为 linux/arm64 或 linux/arm/v7）
         # 如果你的设备是 x86_64 / CHR，请将下方 platform 改为 linux/amd64
-        docker pull --platform linux/arm64 adguard/adguardhome:latest
+        docker pull --platform linux/amd64 adguard/adguardhome:latest
         
         # 2. 导出为兼容 RouterOS 的传统 Tar 包格式
         docker save adguard/adguardhome:latest -o adguardhome.tar
