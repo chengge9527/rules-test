@@ -11,18 +11,25 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v4
 
-    - name: Pull and Save Image using Podman (Legacy Format)
+    - name: Install Skopeo
       run: |
-        # 1. 加上 sudo，确保 Podman 有完全的存储访问权限，显式拉取 amd64 镜像
-        sudo podman pull --platform linux/amd64 docker.io/adguard/adguardhome:latest
+        sudo apt-get update
+        sudo apt-get install -y skopeo
+
+    - name: Fetch and Export compatible image using Skopeo
+      run: |
+        # 1. 确保如果之前有残留同名文件，直接强行删除
+        rm -f ${{ github.workspace }}/adguardhome.tar
         
-        # 2. 加上 sudo 导出，直接保存在当前工作目录下
-        sudo podman save --format docker-archive -o ${{ github.workspace }}/adguardhome.tar docker.io/adguard/adguardhome:latest
-        
-        # 3. 更改 Tar 包的权限，允许 GitHub Actions 的 Upload 插件能够读取并上传它
-        sudo chmod 644 ${{ github.workspace }}/adguardhome.tar
-        
-        # 4. 确认生成
+        # 2. 绕过本地 Docker/Podman，直接从 Docker Hub 将指定架构(amd64) 转换并拉取到本地单一 Tar 包内
+        # 这种格式对于旧版 OCI 运行时（如 RouterOS）具有极高的兼容性
+        skopeo copy \
+          --override-os linux \
+          --override-arch amd64 \
+          docker://docker.io/adguard/adguardhome:latest \
+          docker-archive:${{ github.workspace }}/adguardhome.tar:docker.io/adguard/adguardhome:latest
+          
+        # 3. 确认生成的文件和大小
         ls -lh ${{ github.workspace }}
 
     - name: Upload image as artifact
