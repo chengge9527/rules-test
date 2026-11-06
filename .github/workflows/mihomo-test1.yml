@@ -1,4 +1,4 @@
-name: adguardhome-test1
+name: mihomo-test1
 
 on:
   workflow_dispatch:
