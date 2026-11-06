@@ -13,13 +13,16 @@ jobs:
 
     - name: Pull and Save Image using Podman (Legacy Format)
       run: |
-        # 1. 使用 podman 拉取指定 x86_64/amd64 架构镜像
-        podman pull --platform linux/amd64 docker.io/adguard/adguardhome:latest
+        # 1. 加上 sudo，确保 Podman 有完全的存储访问权限，显式拉取 amd64 镜像
+        sudo podman pull --platform linux/amd64 docker.io/adguard/adguardhome:latest
         
-        # 2. 显式指定导出格式为绝对兼容的传统格式 docker-archive
-        podman save --format docker-archive -o ${{ github.workspace }}/adguardhome.tar docker.io/adguard/adguardhome:latest
+        # 2. 加上 sudo 导出，直接保存在当前工作目录下
+        sudo podman save --format docker-archive -o ${{ github.workspace }}/adguardhome.tar docker.io/adguard/adguardhome:latest
         
-        # 3. 验证文件体积与确认生成
+        # 3. 更改 Tar 包的权限，允许 GitHub Actions 的 Upload 插件能够读取并上传它
+        sudo chmod 644 ${{ github.workspace }}/adguardhome.tar
+        
+        # 4. 确认生成
         ls -lh ${{ github.workspace }}
 
     - name: Upload image as artifact
