@@ -1,4 +1,4 @@
-name: adguardhome-test1
+name: Pull Docker Image and Upload（adguardhome）
 
 on:
   workflow_dispatch:
@@ -11,17 +11,20 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v4
 
-    - name: Pull and Save Docker Image (Legacy Format)
+    - name: Pull and Save Image using Podman (Legacy Format)
       run: |
-        # 1. 显式拉取指定架构的镜像（RouterOS 容器设备通常为 linux/arm64 或 linux/arm/v7）
-        # 如果你的设备是 x86_64 / CHR，请将下方 platform 改为 linux/amd64
-        docker pull --platform linux/amd64 adguard/adguardhome:latest
+        # 1. 使用 podman 拉取指定 x86_64/amd64 架构镜像
+        podman pull --platform linux/amd64 docker.io/adguard/adguardhome:latest
         
-        # 2. 导出为兼容 RouterOS 的传统 Tar 包格式
-        docker save adguard/adguardhome:latest -o adguardhome.tar
+        # 2. 显式指定导出格式为绝对兼容的传统格式 docker-archive
+        podman save --format docker-archive -o ${{ github.workspace }}/adguardhome.tar docker.io/adguard/adguardhome:latest
+        
+        # 3. 验证文件体积与确认生成
+        ls -lh ${{ github.workspace }}
 
     - name: Upload image as artifact
       uses: actions/upload-artifact@v4
       with:
-        name: adguardhome-image
-        path: adguardhome.tar
+        name: adguardhome-image-x86
+        path: ${{ github.workspace }}/adguardhome.tar
+        if-no-files-found: error
