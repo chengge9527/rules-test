@@ -1,4 +1,4 @@
-name: Pull Docker Image and Upload（adguardhome）
+name: adguardhome-test1
 
 on:
   workflow_dispatch:
